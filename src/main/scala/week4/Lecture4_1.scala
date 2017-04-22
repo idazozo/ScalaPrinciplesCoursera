@@ -1,7 +1,5 @@
 package week4
 
-import java.util.NoSuchElementException
-
 class Lecture4_1 {
 
   /** Peano Numbers
@@ -16,10 +14,10 @@ class Lecture4_1 {
 
   object Zero extends Nat {
     def isZero = true
-    override def predecessor = throw NoSuchElementException
+    override def predecessor = throw new Error("Zero.predecessor")
     def + (that: Nat): Nat = that
-    def - (that: Nat):Nat = {
-      if (!that.isZero) throw NoSuchElementException
+    def - (that: Nat): Nat = {
+      if (!that.isZero) throw new Error("Zero.-")
       else Zero
     }
   }
@@ -30,10 +28,8 @@ class Lecture4_1 {
     def + (that: Nat): Nat = predecessor + that.successor
 //    def + (that: Nat): Nat = n + new Succ(that)
 
-    def - (that: Nat): Any = {
-      if (!predecessor.isZero && !that.isZero) {
-        predecessor - that.predecessor
-      } else if (that.isZero) this
+    def - (that: Nat): Nat = {
+      if (that.isZero) this else predecessor - that.predecessor
 //      if (that.isZero) this else n - that.predecessor
     }
   }
