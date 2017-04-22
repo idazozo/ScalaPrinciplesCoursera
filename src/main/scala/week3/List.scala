@@ -1,9 +1,13 @@
 package week3
 
-trait List[T] {
+// Change "T" to "+T" so that when List shows up as method results like in Test beneath,
+// the relationship is covariant
+trait List[+T] {
   def isEmpty: Boolean
   def head: T
   def tail: List[T]
+  // Use lower bounds to make method prepend variance-correct
+  def prepend[U >: T](elem: U): List[U] = new Cons(elem, this)
 }
 
 
@@ -24,15 +28,20 @@ class Cons[T](val head: T, val tail: List[T]) extends List[T] {
     */
 }
 
-class Nil[T] extends List[T] {
+// objects can't have type parameters
+object Nil extends List[Nothing] {
   def isEmpty = true
   def head: Nothing = throw new NoSuchElementException("Nil.head")
   def tail: Nothing = throw new NoSuchElementException("Nil.tail")
 }
 
+object Test {
+  val x: List[String] = Nil
+}
+
 object Lecture3_3 {
   // Like classes, functions can have type parameters
-  def singleton[T](elem: T) = new Cons[T](elem, new Nil[T])
+  def singleton[T](elem: T) = new Cons[T](elem, Nil)
 
   singleton[Int](1)
   singleton[Boolean](true)
